@@ -1,0 +1,17 @@
+node_modules/
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.*
+*.pem
+*.key
+*.p12
+credentials
+credentials.json
+client_secret*.json
+client_secrets.json
+service-account*.json

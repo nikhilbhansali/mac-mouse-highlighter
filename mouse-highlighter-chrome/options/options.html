@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="options.css">
+  <title>Mouse Highlighter - Settings</title>
+</head>
+<body>
+  <div class="options-container">
+    <header class="options-header">
+      <h1>Mouse Highlighter Settings</h1>
+      <p>Customize your mouse highlight effects</p>
+    </header>
+
+    <main class="options-main">
+      <!-- General Settings -->
+      <section class="options-section">
+        <h2>General</h2>
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Enable Highlighter</span>
+              <span class="description">Show highlight effect around cursor</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="enableToggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Highlight Style -->
+      <section class="options-section">
+        <h2>Highlight Style</h2>
+        <div class="style-cards">
+          <label class="style-card active" data-style="circle">
+            <input type="radio" name="highlightStyle" value="circle" checked>
+            <div class="style-preview">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" fill="currentColor" opacity="0.6"/></svg>
+            </div>
+            <span class="style-name">Circle</span>
+            <span class="style-desc">Soft filled circle with gradient</span>
+          </label>
+
+          <label class="style-card" data-style="ring">
+            <input type="radio" name="highlightStyle" value="ring">
+            <div class="style-preview">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="14" fill="none" stroke="currentColor" stroke-width="4"/></svg>
+            </div>
+            <span class="style-name">Ring</span>
+            <span class="style-desc">Outline ring with optional glow</span>
+          </label>
+
+          <label class="style-card" data-style="spotlight">
+            <input type="radio" name="highlightStyle" value="spotlight">
+            <div class="style-preview">
+              <svg viewBox="0 0 48 48">
+                <rect width="48" height="48" fill="currentColor" opacity="0.3"/>
+                <circle cx="24" cy="24" r="12" fill="white"/>
+              </svg>
+            </div>
+            <span class="style-name">Spotlight</span>
+            <span class="style-desc">Dims screen except cursor area</span>
+          </label>
+
+          <label class="style-card" data-style="crosshair">
+            <input type="radio" name="highlightStyle" value="crosshair">
+            <div class="style-preview">
+              <svg viewBox="0 0 48 48">
+                <line x1="24" y1="8" x2="24" y2="40" stroke="currentColor" stroke-width="3"/>
+                <line x1="8" y1="24" x2="40" y2="24" stroke="currentColor" stroke-width="3"/>
+              </svg>
+            </div>
+            <span class="style-name">Crosshair</span>
+            <span class="style-desc">Plus or X shaped indicator</span>
+          </label>
+
+          <label class="style-card" data-style="pulse">
+            <input type="radio" name="highlightStyle" value="pulse">
+            <div class="style-preview">
+              <svg viewBox="0 0 48 48">
+                <circle cx="24" cy="24" r="8" fill="currentColor"/>
+                <circle cx="24" cy="24" r="14" fill="none" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+                <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+              </svg>
+            </div>
+            <span class="style-name">Pulse</span>
+            <span class="style-desc">Continuously pulsing animation</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Appearance -->
+      <section class="options-section">
+        <h2>Appearance</h2>
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Size</span>
+              <span class="description">Highlight diameter in pixels</span>
+            </div>
+            <div class="setting-control range-control">
+              <input type="range" id="sizeSlider" min="20" max="100" value="40">
+              <span id="sizeValue" class="value-label">40px</span>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Color</span>
+              <span class="description">Highlight color</span>
+            </div>
+            <div class="setting-control">
+              <input type="color" id="colorPicker" value="#ffd60a">
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Opacity</span>
+              <span class="description">Highlight transparency</span>
+            </div>
+            <div class="setting-control range-control">
+              <input type="range" id="opacitySlider" min="10" max="100" value="60">
+              <span id="opacityValue" class="value-label">60%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Style-specific Settings -->
+      <section class="options-section" id="ringSettings" style="display: none;">
+        <h2>Ring Settings</h2>
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Ring Width</span>
+              <span class="description">Thickness of the ring</span>
+            </div>
+            <div class="setting-control range-control">
+              <input type="range" id="ringWidthSlider" min="1" max="10" value="3">
+              <span id="ringWidthValue" class="value-label">3px</span>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Enable Glow</span>
+              <span class="description">Add glow effect around ring</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="ringGlowToggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item" id="glowIntensityRow">
+            <div class="setting-label">
+              <span class="label">Glow Intensity</span>
+              <span class="description">Strength of the glow effect</span>
+            </div>
+            <div class="setting-control range-control">
+              <input type="range" id="glowIntensitySlider" min="10" max="100" value="50">
+              <span id="glowIntensityValue" class="value-label">50%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="options-section" id="spotlightSettings" style="display: none;">
+        <h2>Spotlight Settings</h2>
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Dim Opacity</span>
+              <span class="description">Darkness of dimmed area</span>
+            </div>
+            <div class="setting-control range-control">
+              <input type="range" id="dimOpacitySlider" min="10" max="80" value="30">
+              <span id="dimOpacityValue" class="value-label">30%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="options-section" id="crosshairSettings" style="display: none;">
+        <h2>Crosshair Settings</h2>
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Style</span>
+              <span class="description">Crosshair shape</span>
+            </div>
+            <div class="setting-control">
+              <select id="crosshairStyleSelect">
+                <option value="plus">Plus (+)</option>
+                <option value="x">X (×)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Line Width</span>
+              <span class="description">Thickness of crosshair lines</span>
+            </div>
+            <div class="setting-control range-control">
+              <input type="range" id="crosshairWidthSlider" min="1" max="8" value="2">
+              <span id="crosshairWidthValue" class="value-label">2px</span>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Length</span>
+              <span class="description">Length of crosshair lines</span>
+            </div>
+            <div class="setting-control range-control">
+              <input type="range" id="crosshairLengthSlider" min="10" max="60" value="20">
+              <span id="crosshairLengthValue" class="value-label">20px</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="options-section" id="pulseSettings" style="display: none;">
+        <h2>Pulse Settings</h2>
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Speed</span>
+              <span class="description">Pulse animation speed</span>
+            </div>
+            <div class="setting-control">
+              <select id="pulseSpeedSelect">
+                <option value="slow">Slow</option>
+                <option value="medium" selected>Medium</option>
+                <option value="fast">Fast</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Intensity</span>
+              <span class="description">Size variation strength</span>
+            </div>
+            <div class="setting-control">
+              <select id="pulseIntensitySelect">
+                <option value="subtle">Subtle</option>
+                <option value="moderate" selected>Moderate</option>
+                <option value="strong">Strong</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Click Effects -->
+      <section class="options-section">
+        <h2>Click Effects</h2>
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Enable Click Effects</span>
+              <span class="description">Show animation on mouse click</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="clickEffectToggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item" id="clickEffectStyleRow">
+            <div class="setting-label">
+              <span class="label">Effect Style</span>
+              <span class="description">Type of click animation</span>
+            </div>
+            <div class="setting-control">
+              <select id="clickEffectStyleSelect">
+                <option value="ripple">Ripple</option>
+                <option value="colorFlash">Color Flash</option>
+                <option value="shrinkBounce">Shrink & Bounce</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-item" id="clickDurationRow">
+            <div class="setting-label">
+              <span class="label">Duration</span>
+              <span class="description">Click effect animation length</span>
+            </div>
+            <div class="setting-control range-control">
+              <input type="range" id="clickDurationSlider" min="100" max="600" value="300" step="50">
+              <span id="clickDurationValue" class="value-label">300ms</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Performance -->
+      <section class="options-section">
+        <h2>Performance</h2>
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label">Idle Threshold</span>
+              <span class="description">Time before reducing frame rate when mouse is still</span>
+            </div>
+            <div class="setting-control range-control">
+              <input type="range" id="idleThresholdSlider" min="50" max="500" value="100" step="25">
+              <span id="idleThresholdValue" class="value-label">100ms</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reset -->
+      <section class="options-section">
+        <div class="setting-group">
+          <button id="resetBtn" class="reset-btn">Reset to Defaults</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="options-footer">
+      <p>Mouse Highlighter v1.0.0</p>
+    </footer>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

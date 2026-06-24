@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(xcodebuild:*)",
+      "Bash(swiftc:*)",
+      "Bash(chmod:*)",
+      "Bash(swift generate_icon.swift:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial release - Mac Mouse Highlighter v1.0.0\n\nFeatures:\n- Mouse cursor highlight with 3 styles \\(Circle, Spotlight, Ring\\)\n- Click effects with 3 animations \\(Ripple, Color Flash, Shrink & Bounce\\)\n- Independent enable toggles for highlighter and click effects\n- Multi-display support\n- Menu bar icon with quick settings\n- Customizable colors, sizes, and opacity\n- Launch at login support\n- 60fps smooth animations\n- Universal Binary \\(Intel + Apple Silicon\\)\n- macOS 12.0+ \\(Monterey\\) support\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git push:*)",
+      "Bash(git config:*)",
+      "Bash(git tag:*)",
+      "Bash(gh release create v1.0.0 --title \"Mac Mouse Highlighter v1.0.0\" --notes \"$\\(cat <<''EOF''\n# Mac Mouse Highlighter v1.0.0\n\nThe first release of Mac Mouse Highlighter - a simple, native macOS app to highlight your cursor.\n\n## Why This Exists\n\nEver tried to record a tutorial or do a live demo and your audience just loses your cursor? This app fixes that. Simple, free, and open source.\n\n## Features\n\n### Highlight Styles\n- **Circle** - A soft, filled circle with gradient effect\n- **Spotlight** - Dims the entire screen except around the cursor\n- **Ring** - A glowing ring outline around the cursor\n\n### Click Effects\n- **Ripple** - Expanding circle that fades out\n- **Color Flash** - Brief flash of color at click point\n- **Shrink & Bounce** - Spring animation on click\n\n### App Features\n- Menu bar icon with quick settings\n- Works across all displays\n- Customizable colors, sizes, and opacity\n- Launch at login support\n- 60fps smooth animations\n- Low CPU usage\n\n## Requirements\n\n- **macOS 12.0 \\(Monterey\\) or later**\n- Works on both Intel and Apple Silicon Macs \\(Universal Binary\\)\n\n## Installation\n\n1. Download the DMG below \\(coming soon - for now build from source\\)\n2. Drag to Applications\n3. Right-click → Open \\(first launch only\\)\n4. Grant Input Monitoring permission\n\n## Build from Source\n\n```bash\ngit clone https://github.com/nikhilbhansali/mac-mouse-highlighter.git\ncd mac-mouse-highlighter\nopen MouseHighlighter.xcodeproj\n# Build and run \\(Cmd+R\\)\n```\nEOF\n\\)\")",
+      "Bash(./scripts/build-dmg.sh:*)",
+      "Bash(gh release upload:*)",
+      "Bash(gh release view:*)",
+      "Bash(lipo -info:*)",
+      "Bash(open:*)",
+      "Bash(log show --predicate 'processImagePath CONTAINS \"\"\"\"Mouse Highlighter\"\"\"\"' --last 2m)",
+      "Bash(log show --predicate 'processImagePath CONTAINS \"\"\"\"MouseHighlighter\"\"\"\"' --last 2m)",
+      "Bash(log show --last 2m)",
+      "Bash(node generate-icons.js:*)",
+      "Bash(sw_vers:*)",
+      "Bash(security find-identity:*)"
+    ]
+  }
+}
