@@ -8,71 +8,58 @@ protocol AnimationControllerDelegate: AnyObject {
 final class AnimationController {
     weak var delegate: AnimationControllerDelegate?
 
-    private var displayLink: CVDisplayLink?
+    // A main-run-loop timer drives ticks. A CVDisplayLink fires on a background thread and
+    // can silently stop delivering callbacks after display changes or stop/start cycles,
+    // which left click effects frozen on screen.
+    private var timer: Timer?
     private var lastTimestamp: TimeInterval = 0
     private var isRunning = false
     private var isPaused = false
-
-    private let updateQueue = DispatchQueue(label: "com.mousehighlighter.animation", qos: .userInteractive)
 
     // Idle detection
     private var idleTime: TimeInterval = 0
     private let idleThreshold: TimeInterval = 0.5
     private var hasActiveAnimations = false
 
-    // Frame rate control
-    private var frameSkipCounter = 0
-    private var targetFrameRate: Int {
-        return SettingsManager.shared.targetFrameRate
+    private var frameInterval: TimeInterval {
+        return SettingsManager.shared.targetFrameRate == 30 ? 1.0 / 30.0 : 1.0 / 60.0
     }
 
     func start() {
         guard !isRunning else { return }
-
-        var link: CVDisplayLink?
-        CVDisplayLinkCreateWithActiveCGDisplays(&link)
-
-        guard let displayLink = link else { return }
-
-        self.displayLink = displayLink
-        lastTimestamp = CACurrentMediaTime()
-
-        let callback: CVDisplayLinkOutputCallback = { (displayLink, inNow, inOutputTime, flagsIn, flagsOut, displayLinkContext) -> CVReturn in
-            guard let context = displayLinkContext else { return kCVReturnSuccess }
-
-            let controller = Unmanaged<AnimationController>.fromOpaque(context).takeUnretainedValue()
-            controller.tick()
-
-            return kCVReturnSuccess
-        }
-
-        let refcon = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
-        CVDisplayLinkSetOutputCallback(displayLink, callback, refcon)
-        CVDisplayLinkStart(displayLink)
         isRunning = true
         isPaused = false
+        startTimer()
     }
 
     func stop() {
-        guard isRunning, let link = displayLink else { return }
-
-        CVDisplayLinkStop(link)
-        displayLink = nil
+        timer?.invalidate()
+        timer = nil
         isRunning = false
         isPaused = false
     }
 
     func pause() {
-        guard isRunning, !isPaused, let link = displayLink else { return }
-        CVDisplayLinkStop(link)
+        guard isRunning, !isPaused else { return }
+        timer?.invalidate()
+        timer = nil
         isPaused = true
     }
 
     func resume() {
-        guard isRunning, isPaused, let link = displayLink else { return }
-        lastTimestamp = CACurrentMediaTime()
-        CVDisplayLinkStart(link)
+        guard isRunning, isPaused else { return }
         isPaused = false
+        startTimer()
+    }
+
+    private func startTimer() {
+        lastTimestamp = CACurrentMediaTime()
+        let timer = Timer(timeInterval: frameInterval, repeats: true) { [weak self] _ in
+            self?.tick()
+        }
+        // .common modes so effects keep animating during menu tracking.
+        RunLoop.main.add(timer, forMode: .common)
+        self.timer = timer
     }
 
     func notifyActivity() {
@@ -94,28 +81,16 @@ final class AnimationController {
         let deltaTime = currentTime - lastTimestamp
         lastTimestamp = currentTime
 
-        // Frame rate control: skip frames if targeting 30fps
-        if targetFrameRate == 30 {
-            frameSkipCounter += 1
-            if frameSkipCounter % 2 != 0 {
-                return
-            }
-        }
+        delegate?.animationTick(deltaTime: deltaTime)
 
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.animationTick(deltaTime: deltaTime)
+        idleTime += deltaTime
 
-            // Update idle time
-            self.idleTime += deltaTime
+        // Pause when there are no active animations and we've been idle for the threshold
+        let settings = SettingsManager.shared
+        let needsContinuousAnimation = settings.highlightStyle == .pulse && settings.isEnabled
 
-            // Check if we should pause (no active animations and idle for threshold)
-            let settings = SettingsManager.shared
-            let needsContinuousAnimation = settings.highlightStyle == .pulse && settings.isEnabled
-
-            if !self.hasActiveAnimations && !needsContinuousAnimation && self.idleTime > self.idleThreshold {
-                self.pause()
-            }
+        if !hasActiveAnimations && !needsContinuousAnimation && idleTime > idleThreshold {
+            pause()
         }
     }
 

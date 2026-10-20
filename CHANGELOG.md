@@ -5,6 +5,12 @@ All notable changes to Mac Cursor Highlighter Thingy will be documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Click ripples no longer get stuck on screen. Animations are now driven by a main-run-loop timer instead of a display link, and 30fps mode no longer runs animations at half speed.
+
 ## [1.0.0] - 2024
 
 ### Added
